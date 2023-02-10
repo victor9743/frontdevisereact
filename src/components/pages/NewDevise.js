@@ -3,6 +3,8 @@ import RadioInput from "../layout/RadioInput";
 function NewDevise() {
     const [processadores, setProcessadores] = useState([])
 
+    const [processador, setProcessador] = useState()
+
     useEffect(()=>{
         fetch('http://localhost:3000/processadores',{
             method: 'GET',
@@ -19,8 +21,9 @@ function NewDevise() {
     },[])
 
     function getProcessador(e) {
-        console.log(e.target.value)
+        setProcessador(e.target.value)
     }
+    
     return (
 
         <div>
