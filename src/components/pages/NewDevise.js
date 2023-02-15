@@ -19,6 +19,8 @@ function NewDevise() {
     //  array de memorias
     let memoriaArray = []
     let somaMemoria = 0
+    
+    let memoriasList = []
 
     useEffect(()=>{
         fetch('http://localhost:3000/processadores',{
@@ -36,8 +38,8 @@ function NewDevise() {
 
     function getProcessador(e) {
         setProcessador(e.target.value)
-       
         getAllPlacaMae(e.target.value)
+        setMemoriasRam([])
     
     }
     
@@ -49,6 +51,7 @@ function NewDevise() {
 
     function getAllPlacaMae(processador) {
         setPlacasMae([])
+        memoriasList = []
         fetch('http://localhost:3000/placasMae?' + new URLSearchParams(
             {id: processador}
         ),{
@@ -85,41 +88,41 @@ function NewDevise() {
         })
         .then((resp) => resp.json())
         .then((data)=>{
-            console.log(data)
             setMemoriasRam(data)
         })
         .catch((err)=> { console.log(err) })
     }
     
-    function placaVideo() {
-        let teste = document.getElementById("slot")
+    function placaVideo(e) {
+        let somaArray = []
+        let chave = e.target.name
+        if (e.target.checked) {
+            memoriaArray[chave] = parseInt(e.target.value)
+        }
 
-        console.log(teste)
-        // console.log(e)
-        // if (e.target.checked) {
-            // memoriaArray.push(parseInt(e.target.value))
-        // } else {
-            // const index = memoriaArray.indexOf(parseInt(e.target.value));
-    
-            // memoriaArray.splice(index, 1);
-        // }
-        // console.log(memoriaArray)
-        // somaMemoria = memoriaArray.reduce((partialSum, a) => partialSum + a, 0);
+        for(let memoria in memoriaArray) {
+            somaArray.push(memoriaArray[memoria])
+            console.log(somaArray)
+        }
+
         
     }
 
     function forSlots() {
-        let memoriasList = []
 
         for(let i=0; i<slots; i++) {      
             
             memoriasList.push(
                 memoriasRam.map((memoria ,key) =>
                     <div key={key}>
+                        <div> Slot: {i+1}</div>
                         {memoria.tamanho.map((m, key) =>
                             <div key={key}>
-                                <SelectMemory
+                                <RadioInput
+                                    name={`slotMemoria${i + 1}`}
                                     text={`${m} GB`}
+                                    value={m}
+                                    funcao={placaVideo}
                                 />
                             </div>
                             
